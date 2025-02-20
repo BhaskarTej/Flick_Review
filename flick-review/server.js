@@ -1,24 +1,18 @@
-const express = require("express");
-const admin = require("firebase-admin");
-const path = require("path");
-require("dotenv").config();
+const express = require('express');  // Import Express
+const path = require('path');        // Import Path module
 
+const app = express();               // Create Express app
+const PORT = process.env.PORT || 3000;  // Set the port to 3000
 
-const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_PATH;
+// Serve static files from 'views' folder
+app.use(express.static(path.join(__dirname, 'views')));
 
-//initialize firebase admin sdk with credentials
-admin.initializeApp({
-  credential: admin.credential.cert(require(path.resolve(serviceAccountPath))),
+// Route to serve index.html when visiting '/'
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
-const app = express();
 
-const PORT = 3000;
-
-//simple get request
-app.get('/', (req, res) =>{
-    res.send("Get request")
-})
-
+// Start the server
 app.listen(PORT, () => {
-    console.log(`The server is running on port ${PORT}`)
-})
+    console.log(`Server running on http://localhost:${PORT}`);
+});
