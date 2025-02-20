@@ -1,3 +1,14 @@
+import dotenv from "dotenv";
+dotenv.config(); // Load environment variables
+
+import express from "express";
+import path from "path";
+import firebaseApp from "./firebase.js"; // Import Firebase setup
+import { getAuth } from "firebase/auth"; // Import Firebase Authentication
+
+const auth = getAuth(firebaseApp); // Initialize Firebase Auth
+
+
 const express = require('express');  // Import Express
 const path = require('path');        // Import Path module
 
