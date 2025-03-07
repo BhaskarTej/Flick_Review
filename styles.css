@@ -1,0 +1,148 @@
+body {
+    height: 100vh;
+    margin: 0;
+    background-image: url('night-sky-background-with-nebula.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+h1 {
+    color: red;
+    font-size: 3em;
+    font-family: Arial, sans-serif;
+}
+
+.heading {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.logo-image {
+    height: 9vh;
+}
+
+.login-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007BFF;
+    border: 2px solid #0056b3;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #0056b3;
+    border-color: #003f7f;
+}
+
+.genre-main {
+    display: flex;
+    flex-direction: column;
+    height: 70vh;
+}
+
+.genre-heading {
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5vh;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    margin-top: 40px;
+    padding-bottom: 20px;
+}
+
+.sort-to-right {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 2vw;
+    margin-top: -30px;
+}
+
+.sort-container {
+    position: relative;
+    display: inline-block;
+}
+
+.sort-trigger {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
+    display: inline-block;
+    width: fit-content;
+}
+
+.sort-options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.sort-option {
+    padding: 0.9vw;
+    cursor: pointer;
+    color: #333;
+}
+
+.sort-option:hover {
+    background-color: #f0f0f0;
+}
+
+.sort-container:hover .sort-options {
+    display: block;
+}
+
+.movie-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Dynamic grid */
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.movie-container {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+    width: 100%; /* Make sure all cards take equal space */
+    max-width: 250px; /* Set a max width for uniformity */
+}
+
+.movie-container:hover {
+    transform: scale(1.05);
+}
+
+.movie-image {
+    width: 100%; /* Ensure it fits the container */
+    height: 300px; /* Set a fixed height for uniformity */
+    object-fit: cover; /* Crop instead of stretching */
+    border-radius: 5px;
+}
+
+.movie-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+    text-align: center;
+}
