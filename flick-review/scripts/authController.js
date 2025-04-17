@@ -90,5 +90,21 @@ const loginUser = async (email, password) => {
       throw error; // Throw the error to be caught in server.js
     }
   };
-module.exports = { signupUser, loginUser, app }; 
- 
+
+function getUserProfile(firebaseUid, callback) {
+  db.query("SELECT * FROM users WHERE firebase_uid = ?", [firebaseUid], (err, results) => {
+    if (err) {
+      console.error("Error retrieving user profile:", err);
+      return callback(err);
+    }
+
+    if (results.length === 0) {
+      return callback(new Error("User not found"));
+    }
+
+    const user = results[0];
+    callback(null, user);
+  });
+}
+
+module.exports = { signupUser, loginUser, getUserProfile, app };

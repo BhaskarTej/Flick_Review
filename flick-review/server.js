@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 const { loginUser, getUserProfile, signupUser } = require("./scripts/authController"); // Destructure the functions from auth.js
 const path = require('path');
 const app = express();
-const PORT = 3022;
+const PORT = 3040;
 
 // ✅ Set EJS as the View Engine
 app.set("view engine", "ejs");
@@ -155,23 +155,34 @@ app.post("/login", async (req, res) => {
   
       // Store user session and redirect to home
       req.session.user = { username: user.username, email: user.email };
-      res.redirect("home");
+      res.redirect("/profile");
     } catch (error) {
       console.error("Error logging in:", error);
-      res.status(500).send("Error logging in: " + error.message);
+      res.status(500).send("Login failed: " + error.message);
     }
   });
   
-app.get("/profile", (req, res) => {
-    const firebaseUid = req.session.user.firebaseUid;
+  app.get("/profile", (req, res) => {
+    // 💡 Fake session for now, just to test your profile view
+    req.session.user = {
+        firebaseUid: 'fake-uid-123',
+        username: 'FolaD',
+        email: 'fola@test.com'
+    };
 
-    getUserProfile(firebaseUid, (err, user) => {
+    // 💾 Now use that UID to fetch real data from your DB
+    getUserProfile('fake-uid-123', (err, user) => {
         if (err) {
+            console.error("Error fetching user:", err);
             return res.status(500).send("Error fetching profile");
         }
+        console.log("👤 User data passed to profile:", user);
         res.render("profile", { user });
     });
 });
+
+
+
 
 // ✅ User Logout
 app.get("/logout", (req, res) => {
