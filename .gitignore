@@ -1,2 +1,3 @@
 flick-review/node_modules
 .env
+config/firebaseServiceAccountKey.json
