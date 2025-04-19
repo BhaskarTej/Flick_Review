@@ -8,18 +8,23 @@
 </head>
 <body>
 
-    <!-- ✅ Navbar with Profile & Logout -->
+    <!--  Navbar with Profile & Logout -->
     <div class="navbar">
         <!-- Profile Button (Top Left) -->
         <% if (user) { %>
             <a href="/profile" class="profile-btn">👤 <%= user.username %></a>
+            <span><%= user.role %></span>
         <% } %>
 
-        <h1>Flick Review</h1>
+        <a href="/"><h1>Flick Review</h1></a>
 
         <!-- Logout or Login/Signup (Top Right) -->
         <div class="nav-links">
             <% if (user) { %>
+                <% if (user.role === 'mod') { %>
+                   <a href="/report">Reports</a>
+                <% } %>
+                <a href="/change-role">Change Role</a>
                 <a href="/logout">Logout</a>
             <% } else { %>
                 <a href="/login">Login</a>
@@ -31,13 +36,13 @@
     <div class="container">
         <h1>Welcome to Flick Review</h1>
 
-        <!-- 🔎 Search Bar -->
+        <!--  Search Bar -->
         <div class="search-container">
             <input type="text" id="search-bar" placeholder="Search for a movie..." autocomplete="off">
-            <ul id="suggestions"></ul>
+            <ul id="suggestions" class="suggestion-list"></ul>
         </div>
 
-        <!-- 🎬 Movie Genres -->
+        <!--  Movie Genres -->
         <h2>Genres</h2>
         <ul class="genre-list">
             <% movie_genres.forEach(genre => { %>
@@ -45,7 +50,7 @@
             <% }) %>
         </ul>
 
-        <!-- 🍿 Popular Movies -->
+        <!--  Popular Movies -->
         <h2>Popular Movies</h2>
         <div class="movie-list">
             <% popular_movies.forEach(movie => { %>
@@ -58,34 +63,30 @@
             <% }) %>
         </div>
     </div>
-    <!-- ✅ Search Bar Live Suggestions Script -->
+    <!--  Search Bar Live Suggestions Script -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const searchBar = document.getElementById("search-bar");
             const suggestionsBox = document.getElementById("suggestions");
-    
-            searchBar.addEventListener("input", async function () {
+
+            searchBar.addEventListener("input", async () => {
                 const query = searchBar.value.trim();
-    
-                if (query.length < 2) {
-                    suggestionsBox.innerHTML = ""; // Clear suggestions if query is too short
+                if (!query) {
+                    suggestionsBox.innerHTML = "";
                     return;
                 }
-    
-                try {
-                    const response = await fetch(`/search?query=${query}`);
-                    const results = await response.json();
-    
-                    suggestionsBox.innerHTML = ""; // Clear old suggestions
-    
-                    results.slice(0, 4).forEach(movie => {  // ✅ Limit to 4 suggestions
-                        const suggestionItem = document.createElement("li");
-                        suggestionItem.textContent = movie.title;
-                        suggestionsBox.appendChild(suggestionItem);
-                    });
-    
-                } catch (error) {
-                    console.error("Error fetching search results:", error);
+
+                const res = await fetch(`/search?query=${encodeURIComponent(query)}`);
+                const movies = await res.json();
+
+                suggestionsBox.innerHTML = movies.map(movie =>
+                    `<li><a href="/movie/${movie.id}">${movie.title}</a></li>`
+                ).join('');
+            });
+
+            document.addEventListener("click", (e) => {
+                if (!suggestionsBox.contains(e.target) && e.target !== searchBar) {
+                    suggestionsBox.innerHTML = "";
                 }
             });
         });

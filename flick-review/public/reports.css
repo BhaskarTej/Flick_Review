@@ -1,0 +1,64 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #1e1e1e;
+    color: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #444;
+}
+
+th {
+    background-color: #2c2c2c;
+    color: #ffcc00;
+    font-weight: 600;
+}
+
+tr:hover {
+    background-color: #333;
+}
+
+td a {
+    color: #ffcc00;
+    text-decoration: none;
+}
+
+td a:hover {
+    text-decoration: underline;
+}
+
+.container h4 {
+    color: #ffcc00;
+    font-size: 20px;
+    border-bottom: 2px solid #ffcc00;
+    display: inline-block;
+    margin: 30px 0 10px;
+}
+
+form button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.2s ease;
+}
+
+form button:hover {
+    transform: scale(1.2);
+}
+
+button.reviewed .material-icons {
+    color: #ff4d4d; /* Red for delete */
+    font-size: 24px;
+}
+
+button.dismissed .material-icons {
+    color: #00e676; /* Green for done */
+    font-size: 24px;
+}

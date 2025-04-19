@@ -1,0 +1,201 @@
+.movie-detail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin: 40px auto;
+    padding: 20px;
+    max-width: 1200px;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.movie-left {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+    text-align: left;
+}
+
+.movie-left h2 {
+    font-size: 28px;
+    color: #ffcc00;
+    margin-bottom: 10px;
+}
+
+.movie-left img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.movie-meta {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #ccc;
+}
+
+.movie-genres {
+    margin-top: 20px;
+}
+
+.movie-genres ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.movie-genres li {
+    background-color: #333;
+    color: #ffcc00;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Right Overview Section */
+.movie-overview {
+    flex: 2;
+    min-width: 300px;
+    color: #f0f0f0;
+}
+
+.movie-overview p {
+    font-size: 16px;
+    line-height: 1.7;
+    text-align: justify;
+}
+
+/* Reviews Section */
+.reviews {
+    width: 100%;
+    margin-top: 40px;
+    border-top: 2px solid #ffcc00;
+    padding-top: 20px;
+}
+
+.reviews h3 {
+    color: #ffcc00;
+    font-size: 22px;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.review {
+    background-color: #1e1e1e;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    color: #e0e0e0;
+    position: relative;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #aaa;
+}
+
+.review-username {
+    margin-right: auto;
+    font-weight: bold;
+    color: #ffcc00;
+}
+
+.review-date {
+    flex-shrink: 0;
+}
+
+.review-body {
+    text-align: center;
+    font-size: 1rem;
+    color: #f0f0f0;
+}
+
+.review-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 10px;
+}
+
+form {
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin-top: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+form h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    color: #333;
+}
+
+form textarea {
+    width: 95%;
+    height: 100%;
+    padding: 10px;
+    border-radius: 2%;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    resize: vertical;
+}
+
+button[type="submit"] {
+    background-color:  #333;
+    color: #ffcc00;
+    border: none;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 5px;
+}
+
+button[type="submit"]:hover {
+    background-color: #7b813e;
+}
+
+.cancel {
+    background-color:  #333;
+    color: #ff2600;
+    border: none;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 5px;
+}
+
+.cancel:hover {
+    background-color: #81513e;
+}
+
+.edit{
+    background-color:  #333;
+    color: #ffcc00;
+    border: none;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-bottom: 5px;
+}
+
+.edit:hover {
+    background-color: #7b813e;
+}

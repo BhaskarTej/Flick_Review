@@ -5,19 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= movie.title %></title>
     <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/movie.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        .rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: start;
+        }
+        .rating input {
+            display: none;
+        }
+        .rating label {
+            font-size: 30px;
+            color: lightgray;
+            cursor: pointer;
+            transition: color 0.3s;
+            padding: 5px;
+        }
+        .rating input:checked ~ label {
+            color: gold;
+        }
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: gold;
+        }
+
+        .rating-container{
+            display: flex;
+        }
+        .review-rating{
+            display: flex;
+            cursor: default;
+        }
+        .review-rating:not(:last-child){
+            margin-right: 12px;
+        }
+        .rating-selected > .rating-button,
+        .rating-selected > .rating-count{
+            color: lightpink;
+        }
+        .rating-button{
+            margin-right: 6px;
+            cursor: pointer;
+            color: white;
+        }
+        .review-rating:not(.rating-selected) > .rating-button:hover{
+            color: bisque;
+        }
+
+        .report{
+            all: unset;
+            margin-left: 5px;
+        }
+        .report:hover{
+            color: red;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <div class="navbar">
         <!-- Profile Button (Top Left) -->
         <% if (user) { %>
             <a href="/profile" class="profile-btn">👤 <%= user.username %></a>
+            <span><%= user.role %></span>
         <% } %>
 
-        <h1>Flick Review</h1>
+        <a href="/"><h1>Flick Review</h1></a>
 
         <!-- Logout or Login/Signup (Top Right) -->
         <div class="nav-links">
             <% if (user) { %>
+                <% if (user.role === 'mod') { %>
+                   <a href="/report">Reports</a>
+                <% } %>
+                <a href="/change-role">Change Role</a>
                 <a href="/logout">Logout</a>
             <% } else { %>
                 <a href="/login">Login</a>
@@ -26,39 +89,277 @@
         </div>
     </div>
 
-    <h2><%= movie.title %></h2>
-    <div>
-        <img src="https://image.tmdb.org/t/p/w500<%= movie.poster_path %>" alt="<%= movie.title %>">
-        <p><strong>Release Date:</strong> <%= movie.release_date %></p>
-        <p><strong>Rating:</strong> <%= movie.vote_average %>/10</p>
-        <p><%= movie.overview %></p>
-        
-        <h3>Genres</h3>
-        <ul>
-            <% movie.genres.forEach(genre => { %>
-                <li><%= genre.name %></li>
-            <% }) %>
-        </ul>
+    <div class="movie-detail">
+        <div class="movie-left">
+            <h2><%= movie.title %></h2>
+            <img src="https://image.tmdb.org/t/p/w500<%= movie.poster_path %>" alt="<%= movie.title %>">
+            <div class="movie-meta">
+                <p><strong>Release Date:</strong> <%= movie.release_date %></p>
+                <p><strong>Rating:</strong> <%= movie.vote_average %>/10</p>
+            </div>
 
-        <h3>Reviews</h3>
-        <div>
-            <% if (reviews.length > 0) { %>
-                <% reviews.forEach(review => { %>
-                    <div>
-                        <p><strong><%= review.username %>:</strong> <%= review.comment %></p>
-                    </div>
-                <% }) %>
-            <% } else { %>
-                <p>No reviews yet. Be the first to write one!</p>
-            <% } %>
+            <div class="movie-genres">
+                <h3>Genres</h3>
+                <ul>
+                    <% movie.genres.forEach(genre => { %>
+                        <li><%= genre.name %></li>
+                    <% }) %>
+                </ul>
+            </div> 
         </div>
+        
+        <div class="movie-overview">
+            <h3>Overview</h3>
+            <p><%= movie.overview %></p>
 
-        <h3>Add a Review</h3>
-        <form action="/review" method="POST">
-            <input type="hidden" name="movieID" value="<%= movie.id %>">
-            <textarea name="comment" placeholder="Write a review..." required></textarea>
-            <button type="submit">Submit</button>
-        </form>
+            <div class="reviews">
+                <h3>Add a Review</h3>
+                <form action="/review" method="POST">
+                    <input type="hidden" name="movieID" value="<%= movie.id %>">
+                    <textarea name="text" placeholder="Write a review..." required></textarea>
+                    
+                    <div class="rating">
+                        <input type="radio" id="star5" name="rating" value="5">
+                        <label for="star5">&#9733;</label>
+
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4">&#9733;</label>
+
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3">&#9733;</label>
+
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2">&#9733;</label>
+
+                        <input type="radio" id="star1" name="rating" value="1" required>
+                        <label for="star1">&#9733;</label>
+                    </div>
+                    <button type="submit">Submit</button>
+                </form>
+
+                <div id="updateReview" style="display: none;">
+                    <h4>Edit Review</h4>
+            
+                    <form action="/edit-review" method="POST">
+                        <input type="hidden" name="movieID" value="<%= movie.id %>">
+                        <input type="hidden" id="reviewId" name="reviewId">
+                        <textarea id="reviewText" name="text"></textarea>
+            
+                        <div class="rating">
+                            <input type="radio" id="star5_e" name="e_rating" value="5">
+                            <label for="star5_e">&#9733;</label>
+            
+                            <input type="radio" id="star4_e" name="e_rating" value="4">
+                            <label for="star4_e">&#9733;</label>
+            
+                            <input type="radio" id="star3_e" name="e_rating" value="3">
+                            <label for="star3_e">&#9733;</label>
+            
+                            <input type="radio" id="star2_e" name="e_rating" value="2">
+                            <label for="star2_e">&#9733;</label>
+            
+                            <input type="radio" id="star1_e" name="e_rating" value="1" required>
+                            <label for="star1_e">&#9733;</label>
+                        </div>
+            
+                        <button type="submit">Update</button>
+                        <button  class="cancel" type="button" onclick="cancelEdit()">Cancel</button>
+                    </form>
+                </div>
+
+                <div id="reportForm" style="display: none;">
+                    <h4>Report Review</h4>
+                    
+                    <form action="/report" method="POST">
+                        <input type="hidden" name="movieID" value="<%= movie.id %>">
+                        <input type="hidden" name="targetReviewId" id="targetReviewId">
+            
+                        <label>
+                            <input type="radio" name="reportReason" value="inappropriate" required>
+                            Inappropriate
+                        </label><br>
+                        <label>
+                            <input type="radio" name="reportReason" value="spam" required>
+                            Spam
+                        </label><br>
+                        <label>
+                            <input type="radio" name="reportReason" value="irrelevant" required>
+                            Irrelevant
+                        </label><br>
+                        
+                        <button type="submit">Submit</button>
+                        <button class="cancel" onclick="hideForm()">Cancel</button>
+                    </form>
+                </div>            
+
+                <h3>Reviews</h3>
+                <% if (reviews.length > 0) { %>
+                    <% reviews.forEach(review => { %>
+                        <div class="review" data-username="<%= user ? user.username : 'Guest' %>" data-review-id="<%= review.reviewId %>">
+                            <div class="review-header">
+                                <span class="review-username"><%= review.username %></span>
+                                <span> Created: <%= new Date(review.dateCreated).toLocaleString("en-US", { 
+                                            hour: "2-digit", minute: "2-digit", hour12: false, 
+                                            month: "short", year: "numeric" 
+                                        }) %>
+                                </span>
+                                <% if (user && user.username != review.username) { %>
+                                    <button class="report" onclick="report('<%= review.reviewId %>')">
+                                        <span class="material-icons">flag</span>
+                                    </button>
+                                <% } %>
+            
+                            </div>
+
+                            <div class="review-body">
+                                <p><%= review.text %></p>
+                                <p>Rating: <%= review.rating %> Stars</p>
+                            </div>
+
+                            <div class="review-footer">
+                                <% if (user && user.username === review.username) { %>
+                                    <button class="edit" onclick="editReview('<%= review.reviewId %>', '<%= review.text %>', '<%= review.rating %>')">Edit</button>
+                                    <span>Modified: <%= new Date(review.dateModified).toLocaleString("en-US", { 
+                                        hour: "2-digit", minute: "2-digit", hour12: false, 
+                                        month: "short", year: "numeric" 
+                                    }) %>
+                            </span>
+                                <% } %>
+                            </div>
+                                
+                            <% if(user){ %>
+                            <div class="rating-container">
+                                <div class="review-rating like">
+                                    <span class="rating-button material-icons">thumb_up</span>
+                                    <span class="rating-count"></span>
+                                </div>
+                                <div class="review-rating dislike">
+                                    <span class="rating-button material-icons">thumb_down</span>
+                                    <span class="rating-count"></span>
+                                </div>
+                            </div>
+                            <% }%>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p>No reviews yet. Be the first to write one!</p>
+                <% } %>
+            </div>
+        </div>
     </div>
+
+    <script>
+        function editReview(id, text, rating) {
+            document.getElementById('updateReview').style.display = 'block';
+            document.getElementById('reviewId').value = id;
+            document.getElementById('reviewText').value = text;
+
+            document.querySelectorAll('input[name="e_rating"]').forEach(radio => {
+                if (radio.value == rating) {
+                    radio.checked = true;
+                }
+            });
+        }
+        
+        function cancelEdit() {
+            document.getElementById('updateReview').style.display = 'none';
+        }
+    </script>
+    <script>
+        function report(reviewId){
+            document.getElementById('reportForm').style.display = 'block';
+            document.getElementById("targetReviewId").value = reviewId;
+        }
+
+        function hideForm(){
+            document.getElementById('reportForm').style.display = 'none';
+        }
+    </script>
+    <script>
+        document.querySelectorAll(".review").forEach( async review => {
+            const review_Id = review.dataset.reviewId;
+            const username = review.dataset.username;
+            const ratings = review.querySelectorAll(".review-rating");
+            
+            const response = await fetch(`/rating/${review_Id}/${username}`);
+            const ratingStatus = await response.json();
+            console.log(ratingStatus)
+
+            //pre-select if user has already rated
+            if (ratingStatus.userAction === 'like') {
+                review.querySelector(".review-rating.like").classList.add("rating-selected");
+            } else if (ratingStatus.userAction === 'dislike') {
+                review.querySelector(".review-rating.dislike").classList.add("rating-selected");
+            }else{
+                review.querySelector(".review-rating.dislike").classList.remove("rating-selected");
+                review.querySelector(".review-rating.like").classList.remove("rating-selected");
+            }
+
+            //update count on startup
+            const likeCount = review.querySelector(".review-rating.like .rating-count");
+            const dislikeCount = review.querySelector(".review-rating.dislike .rating-count");
+            
+            likeCount.textContent = ratingStatus.totalLikes;
+            dislikeCount.textContent = ratingStatus.totalDislikes;
+            
+            let isLiked = ratingStatus.userAction === "like";
+            let isDisliked = ratingStatus.userAction === "dislike";
+            
+            ratings.forEach(rating => {
+                const button = rating.querySelector(".rating-button");
+                const count = rating.querySelector(".rating-count");
+                
+                
+                button.addEventListener("click",async () =>{
+                    const isSelected = rating.classList.contains("rating-selected");
+                    const type = rating.classList.contains("like") ? "like" : "dislike";
+                    
+                    
+                    if (isSelected) {
+                        // toggle it off if selected)
+                        rating.classList.remove("rating-selected");
+
+                        //like counter logic
+                        if (type === "like") {
+                            likeCount.textContent = parseInt(likeCount.textContent) - 1;
+                            isLiked = false;
+                        } else {
+                            dislikeCount.textContent = parseInt(dislikeCount.textContent) - 1;
+                            isDisliked = false;
+                        }
+                    }else {
+                        // if not selected, toggle it on
+                        ratings.forEach(rating => rating.classList.remove("rating-selected"));
+                        rating.classList.add("rating-selected");
+
+
+                        //like counter logic
+                        if (type === "like") {
+                            if (isDisliked) {
+                                dislikeCount.textContent = parseInt(dislikeCount.textContent) - 1; // Decrease dislike count if dislike was selected
+                                isDisliked = false;
+                            }
+                            likeCount.textContent = parseInt(likeCount.textContent) + 1;
+                            isLiked = true;
+                        } else {
+                            if (isLiked) {
+                                likeCount.textContent = parseInt(likeCount.textContent) - 1; // Decrease like count if like was selected
+                                isLiked = false;
+                            }
+                            dislikeCount.textContent = parseInt(dislikeCount.textContent) + 1;
+                            isDisliked = true;
+                        }
+                    }
+                    
+                    //perform action 
+                    await fetch(`/rating/${review_Id}/${type}/${username}`, {
+                            method: "POST"
+                        });
+                    
+                    
+                })
+            })
+        })
+    </script>
 </body>
 </html>

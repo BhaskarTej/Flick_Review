@@ -96,6 +96,11 @@ h2 {
     padding: 20px;
 }
 
+.movie-list a{
+    text-decoration: none;
+    color: inherit;
+}
+
 .movie-card {
     width: 220px;
     background-color: #1e1e1e;
@@ -234,36 +239,56 @@ h2 {
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: 1px solid #444;
     border-radius: 5px;
-    background: white;
+    background: #fff;
     color: black;
+    z-index: 1;
+    position: relative;
 }
 
 /* 🔍 Suggestions Dropdown */
 #suggestions {
     list-style-type: none;
     padding: 0;
-    margin-top: 5px; /* ✅ Ensures dropdown appears below the input */
+    margin-top: 8px; /*  Ensures dropdown appears below the input */
     position: absolute;
     left: 0;
+    top: 100%;
     width: 100%;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    background: #1e1e1e;
+    border: 1px solid #444;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
     z-index: 1000;
-    max-height: 160px; /* ✅ Limits dropdown height to 4 items */
+    max-height: 200px; /*  Limits dropdown height to 4 items */
     overflow-y: auto;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* ✅ Adds a shadow for visibility */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /*  Adds a shadow for visibility */
 }
 
 #suggestions li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     padding: 10px;
     cursor: pointer;
-    color: black;
+    color: #f5f5f5;
     font-size: 16px;
 }
 
+#suggestions img {
+    width: 40px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+#suggestions li a {
+    text-decoration: none;
+    color: #f5f5f5;
+    display: inline-block;
+}
+
 #suggestions li:hover {
-    background-color: #f0f0f0;
+    background-color: #333;
 }
