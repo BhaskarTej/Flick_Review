@@ -7,7 +7,7 @@ if (!process.env.FIREBASE_SERVICE_ACCOUNT_KEY_PATH) {
 }
 
 // Load the service account key JSON file
-const serviceAccount = require(process.env.FIREBASE_SERVICE_ACCOUNT_KEY_PATH);
+const serviceAccount = require("./firebaseServiceAccountKey.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),

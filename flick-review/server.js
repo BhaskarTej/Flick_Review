@@ -163,24 +163,33 @@ app.post("/login", async (req, res) => {
   });
   
   app.get("/profile", (req, res) => {
-    // 💡 Fake session for now, just to test your profile view
-    req.session.user = {
-        firebaseUid: 'fake-uid-123',
-        username: 'FolaD',
-        email: 'fola@test.com'
-    };
+    const firebaseUid = "fake-uid-123";
 
-    // 💾 Now use that UID to fetch real data from your DB
-    getUserProfile('fake-uid-123', (err, user) => {
-        if (err) {
-            console.error("Error fetching user:", err);
-            return res.status(500).send("Error fetching profile");
+    getUserProfile(firebaseUid, (err, user) => {
+        if (err || !user) {
+            console.warn("User not found or error occurred. Showing fallback profile.");
+
+            const dummyUser = {
+                username: 'FolaD',
+                name: 'Folasade Durojaiye',
+                email: 'fola@example.com',
+                profile_picture: '/images/default-avatar.png',
+                reviews: [
+                    { movie_title: 'Inception', rating: 5, content: 'Mind-blowing visuals and story!' },
+                    { movie_title: 'Barbie', rating: 4, content: 'Fun, feminist, and full of color.' }
+                ],
+                favorites: [
+                    { id: 123, title: "Black Panther", poster_path: "/xJWPZIYOEFIjZpBL7SVBGnzRYXp.jpg" }
+                ]
+            };
+
+            return res.render("profile", { user: dummyUser });
         }
-        console.log("👤 User data passed to profile:", user);
+
+        console.log("✅ User data loaded from DB:", user);
         res.render("profile", { user });
     });
 });
-
 
 
 

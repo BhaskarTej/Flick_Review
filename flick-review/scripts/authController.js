@@ -1,5 +1,4 @@
 const { initializeApp } = require("firebase/app");
-const admin = require("../config/firebaseAdmin");
 const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } = require("firebase/auth");
 
 require("dotenv").config();
@@ -93,6 +92,7 @@ const loginUser = async (email, password) => {
   };
 
 function getUserProfile(firebaseUid, callback) {
+  console.log("Looking for user with UID:", firebaseUid);
   db.query("SELECT * FROM users WHERE firebase_uid = ?", [firebaseUid], (err, results) => {
     if (err) {
       console.error("Error retrieving user profile:", err);
@@ -100,6 +100,7 @@ function getUserProfile(firebaseUid, callback) {
     }
 
     if (results.length === 0) {
+      console.warn(" No user found for UID:", firebaseUid);
       return callback(new Error("User not found"));
     }
 
@@ -108,4 +109,4 @@ function getUserProfile(firebaseUid, callback) {
   });
 }
 
-module.exports = { signupUser, loginUser, getUserProfile, app };
+module.exports = { signupUser, loginUser, getUserProfile };

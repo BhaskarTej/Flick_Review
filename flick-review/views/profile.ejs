@@ -1,59 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Flick Review</title>
-    <link rel="stylesheet" href="/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile - Flick Review</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    body {
+      background-color: #0e0e0e;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px 15px;
+      background-color: #111;
+      border-bottom: 1px solid #333;
+      font-size: 20px;
+      font-weight: bold;
+      box-sizing: border-box;
+    }
+
+    .nav-links {
+      padding-right: 30px;
+    }
+
+    .nav-links a {
+      margin-left: 20px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .profile-layout {
+      display: flex;
+      align-items: flex-start;
+      margin-top: 60px;
+      padding: 0 60px;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .profile-pic {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 5px solid #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      color: #ccc;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .user-and-reviews {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .user-info {
+      margin-top: 55px;
+      margin-bottom: 40px;
+    }
+
+    .user-info div {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .reviews-section {
+      margin-top: 20px;
+    }
+
+    .reviews-section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #facc15;
+      display: inline-block;
+      padding-bottom: 3px;
+    }
+
+    .review-card {
+      background: #fff;
+      color: #000;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .review-card h3 {
+      margin: 0 0 5px;
+      font-size: 18px;
+    }
+
+    .star-rating {
+      color: #facc15;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+  </style>
 </head>
 <body>
 
-    <!-- ✅ Navbar with Profile & Logout -->
-    <div class="navbar">
-        <% if (user) { %>
-            <a href="/profile" class="profile-btn">👤 <%= user.username %></a>
-        <% } %>
+  <!-- ✅ Navbar -->
+  <div class="navbar">
+    <div>Flick Review</div>
+    <div class="nav-links">
+      <% if (user) { %>
+        <a href="/logout">Logout</a>
+      <% } else { %>
+        <a href="/login">Login</a>
+        <a href="/signup">Sign Up</a>
+      <% } %>
+    </div>
+  </div>
 
-        <h1>Flick Review</h1>
-
-        <div class="nav-links">
-            <% if (user) { %>
-                <a href="/logout">Logout</a>
-            <% } else { %>
-                <a href="/login">Login</a>
-                <a href="/signup">Sign Up</a>
-            <% } %>
-        </div>
+  <!-- ✅ Profile Info + Reviews Side-by-Side -->
+  <div class="profile-layout">
+    <div class="profile-pic">
+      Profile<br>Picture
     </div>
 
-    <!-- ✅ Profile Container -->
-    <div class="container">
-        <% if (user) { %>
-            <div class="profile-header">
-                <img src="<%= user.profile_picture || '/images/default-avatar.png' %>" alt="Profile Picture" class="profile-pic">
-                <h2><%= user.username %></h2>
-                <p><%= user.name %></p>
-            </div>
+    <div class="user-and-reviews">
+      <div class="user-info">
+        <div><strong>Username:</strong> @<%= user.username %></div>
+        <div><strong>Name:</strong> <%= user.name %></div>
+      </div>
 
-            <!-- ✅ Past Reviews -->
-            <h2>Past Reviews</h2>
-            <div class="review-list">
-                <% if (user.reviews.length === 0) { %>
-                    <p>No reviews yet.</p>
-                <% } else { %>
-                    <% user.reviews.forEach(review => { %>
-                        <div class="review-card">
-                            <p><strong><%= review.movie_title %></strong></p>
-                            <p>Rating: ⭐ <%= review.rating %>/5</p>
-                            <p><em><%= review.content %></em></p>
-                        </div>
-                    <% }) %>
-                <% } %>
-            </div>
+      <div class="reviews-section">
+        <h2>Past Reviews</h2>
+        <% if (user.reviews.length === 0) { %>
+          <p>No reviews yet.</p>
         <% } else { %>
-            <p>You need to <a href="/login">log in</a> to view your profile.</p>
+          <% user.reviews.forEach(review => { %>
+            <div class="review-card">
+              <h3><%= review.movie_title %></h3>
+              <div class="star-rating">⭐ <%= review.rating %>/5</div>
+              <p><%= review.content %></p>
+            </div>
+          <% }) %>
         <% } %>
+      </div>
     </div>
+  </div>
 
 </body>
 </html>
