@@ -28,8 +28,19 @@
             <input type="text" name="username" placeholder="Username" required>
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
+        
+            <div class="profile-icon-selection">
+                <label style="margin-top: 10px;">Choose a profile icon:</label><br>
+                <input type="radio" id="female-icon" name="profile_picture" value="/images/female-icon.png" required>
+                <label for="female-icon">Female</label><br>
+        
+                <input type="radio" id="male-icon" name="profile_picture" value="/images/male-icon.png">
+                <label for="male-icon">Male</label>
+            </div>
+        
             <button type="submit">Sign Up</button>
         </form>
+        
     </div>
 
 </body>
